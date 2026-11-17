@@ -1,231 +1,115 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>หัวใจมนุษย์ 3 มิติ | Mayo AR Human Body</title>
-
-  <!-- ตัวแสดงผลโมเดล 3 มิติของ Google (ต้องมีอินเทอร์เน็ต) -->
-  <script type="module"
-    src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10243a">
+  <title>Mayo AR Human Body | ห้องเรียนอวัยวะมนุษย์</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --ink: #1b2430;
-      --paper: #f2f5f7;
-      --stage: #232a35;
-      --heart: #c8243b;
-      --heart-dark: #a31b2f;
-      --teal: #0f7b8a;
-      --muted: #5b6672;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root { --ink: #e9eef2; --paper: #151a21; --muted: #9aa6b2; }
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Sarabun", "Noto Sans Thai", Tahoma, sans-serif;
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: var(--ink);
-      background: var(--paper);
-    }
-    header { padding: 16px 18px 12px; }
-    h1 {
-      margin: 0;
-      font-family: "Prompt", "Noto Sans Thai", Tahoma, sans-serif;
-      font-weight: 600;
-      font-size: 1.5rem;
-      line-height: 1.3;
-    }
-    header p { margin: 2px 0 0; color: var(--muted); font-size: .95rem; }
-
-    .stage {
-      position: relative;
-      margin: 0 12px;
-      border-radius: 14px;
-      overflow: hidden;
-      background: radial-gradient(circle at 50% 40%, #394252, var(--stage) 70%);
-    }
-    model-viewer {
-      display: block;
-      width: 100%;
-      height: 60vh;
-      min-height: 340px;
-      --poster-color: transparent;
-    }
-
-    /* แถบโหลด */
-    .loading {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 12px;
-      color: #fff; background: rgba(35, 42, 53, .92);
-      transition: opacity .3s;
-    }
-    .loading.done { opacity: 0; pointer-events: none; }
-    .bar { width: 60%; max-width: 260px; height: 8px; border-radius: 4px;
-           background: rgba(255,255,255,.2); overflow: hidden; }
-    .bar i { display: block; height: 100%; width: 0; background: var(--heart);
-             transition: width .2s; }
-
-    /* ปุ่ม AR (แสดงเฉพาะเครื่องที่รองรับ) */
-    .ar-btn {
-      position: absolute; left: 50%; bottom: 16px;
-      transform: translateX(-50%);
-      border: 0; border-radius: 30px;
-      padding: 14px 26px;
-      background: var(--heart); color: #fff;
-      font: 600 1.1rem "Prompt", "Noto Sans Thai", Tahoma, sans-serif;
-      box-shadow: 0 6px 16px rgba(0,0,0,.4);
-      white-space: nowrap;
-    }
-    .ar-btn:active { background: var(--heart-dark); }
-    .ar-btn:focus-visible, .tool:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
-
-    .tools { display: flex; gap: 10px; padding: 12px; }
-    .tool {
-      flex: 1;
-      border: 2px solid var(--teal); border-radius: 10px;
-      background: transparent; color: var(--teal);
-      padding: 10px 8px;
-      font: 600 1rem "Sarabun", Tahoma, sans-serif;
-    }
-    .tool:active { background: var(--teal); color: #fff; }
-
-    .notice {
-      margin: 0 12px 12px; padding: 10px 14px;
-      border-left: 4px solid var(--teal);
-      background: rgba(15, 123, 138, .12);
-      font-size: .95rem;
-    }
-    .notice[hidden] { display: none; }
-
-    .guide { padding: 0 18px 8px; }
-    .guide h2 {
-      font-family: "Prompt", "Noto Sans Thai", Tahoma, sans-serif;
-      font-weight: 500; font-size: 1.1rem; margin: 14px 0 6px;
-    }
-    .guide ul { margin: 0; padding-left: 1.2em; }
-    .guide li { margin-bottom: 4px; }
-    footer { padding: 8px 18px 28px; color: var(--muted); font-size: .85rem; }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/style.css">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
+  <!-- MindAR image tracking; loaded only when the scan feature is opened -->
 </head>
 <body>
-  <header>
-    <h1>หัวใจมนุษย์ 3 มิติ</h1>
-    <p>สื่อการเรียนรู้ สกร. อำเภอมายอ</p>
-  </header>
+<header class="topbar">
+  <div class="brand-mark">M</div>
+  <div><div class="brand-title">Mayo AR Human Body</div><div class="brand-subtitle">ห้องเรียนอวัยวะมนุษย์เสมือนจริง</div></div>
+</header>
 
-  <div class="stage">
-    <!--
-      เปลี่ยนขนาดใน AR: เพิ่มบรรทัด  scale="3 3 3"  (ตัวเลขทั้งสามต้องเท่ากัน)
-      เปลี่ยนไฟล์โมเดล: แก้ชื่อใน src="heart.glb"
-    -->
-    <model-viewer id="mv"
-      src="heart.glb"
-      alt="โมเดลหัวใจมนุษย์ 3 มิติ"
-      ar
-      ar-modes="webxr scene-viewer quick-look"
-      ar-placement="floor"
-      ar-scale="auto"
-      camera-controls
-      touch-action="pan-y"
-      autoplay
-      shadow-intensity="1"
-      interaction-prompt="auto">
-
-      <button slot="ar-button" class="ar-btn">ดูหัวใจในห้องจริง (AR)</button>
-    </model-viewer>
-
-    <div class="loading" id="loading">
-      <div>กำลังโหลดโมเดล…</div>
-      <div class="bar"><i id="barFill"></i></div>
-    </div>
-  </div>
-
-  <div class="tools">
-    <button class="tool" id="btnBeat" type="button">หยุดหัวใจเต้น</button>
-    <button class="tool" id="btnReset" type="button">กลับมุมมองเดิม</button>
-  </div>
-
-  <p class="notice" id="noAr" hidden>
-    เครื่องหรือเบราว์เซอร์นี้ยังไม่รองรับโหมด AR แต่ยังหมุนและซูมดูโมเดลได้ตามปกติ
-    ถ้าเปิดจากแอป LINE หรือ Facebook ให้กดเมนูแล้วเลือก “เปิดใน Chrome”
-  </p>
-  <p class="notice" id="errMsg" hidden></p>
-
-  <section class="guide">
-    <h2>วิธีใช้</h2>
-    <ul>
-      <li>ลากนิ้วเดียว เพื่อหมุนดูรอบด้าน</li>
-      <li>ถ่างหรือหุบสองนิ้ว เพื่อซูมเข้าออก</li>
-      <li>กดปุ่มสีแดง “ดูหัวใจในห้องจริง” แล้วส่องกล้องไปที่พื้นหรือโต๊ะเรียบ ขยับมือถือช้าๆ จนโมเดลลอยขึ้นมา</li>
-    </ul>
+<main class="container">
+  <section class="hero">
+    <p class="eyebrow">LEARN • EXPLORE • DISCOVER</p>
+    <h1>เรียนรู้ร่างกายมนุษย์<br><span>ผ่านโลกเสมือนจริง</span></h1>
+    <p>สำรวจอวัยวะ 3 มิติ ทดลองสแกนภาพ และทบทวนความรู้ด้วยแบบทดสอบ</p>
+    <div class="hero-chips"><span>3D MODEL</span><span>IMAGE AR</span><span>LEARNING</span></div>
   </section>
 
-  <footer>
-    เครดิตโมเดล: “[Animation] Human Heart” โดย Michel Paschalis, Sketchfab
-  </footer>
+  <nav class="tabs" aria-label="เมนูหลัก">
+    <button class="tab active" data-page="home">หน้าแรก</button>
+    <button class="tab" data-page="ar">AR อวัยวะ</button>
+    <button class="tab" data-page="lesson">บทเรียน</button>
+    <button class="tab" data-page="quiz">แบบทดสอบ</button>
+  </nav>
 
-  <script>
-    var mv = document.getElementById('mv');
-    var loading = document.getElementById('loading');
-    var barFill = document.getElementById('barFill');
-    var noAr = document.getElementById('noAr');
-    var errMsg = document.getElementById('errMsg');
-    var btnBeat = document.getElementById('btnBeat');
-    var btnReset = document.getElementById('btnReset');
+  <section id="page-home" class="page active">
+    <div class="section-heading"><div><p class="eyebrow">WELCOME</p><h2>ยินดีต้อนรับสู่ห้องเรียน</h2></div></div>
+    <div class="feature-grid">
+      <button class="feature-card" data-goto="ar"><span class="feature-icon">🫀</span><b>สำรวจอวัยวะ 3 มิติ</b><small>หมุนและซูมดูหัวใจ</small></button>
+      <button class="feature-card" data-goto="ar"><span class="feature-icon">📷</span><b>สแกนภาพอวัยวะ</b><small>ทดลอง Image AR</small></button>
+      <button class="feature-card" data-goto="lesson"><span class="feature-icon">📖</span><b>เรียนรู้หน้าที่</b><small>อ่านบทเรียนสั้น ๆ</small></button>
+      <button class="feature-card" data-goto="quiz"><span class="feature-icon">🧠</span><b>ทดสอบความรู้</b><small>ตอบคำถามและดูคะแนน</small></button>
+    </div>
+    <div class="notice info"><b>เริ่มต้นใช้งาน</b><br>เลือกเมนู “AR อวัยวะ” เพื่อดูหัวใจ 3 มิติ หรือเลือก “บทเรียน” เพื่อศึกษาความรู้ก่อนทำแบบทดสอบ</div>
+    <div class="section-heading"><div><p class="eyebrow">LEARNING GOALS</p><h2>สิ่งที่จะได้เรียนรู้</h2></div></div>
+    <ul class="goal-list"><li>รู้จักชื่อและตำแหน่งของอวัยวะสำคัญ</li><li>อธิบายหน้าที่พื้นฐานของหัวใจ ปอด และสมองได้</li><li>ใช้สื่อดิจิทัลเพื่อสำรวจและทบทวนความรู้</li></ul>
+  </section>
 
-    // แถบความคืบหน้าการโหลด
-    mv.addEventListener('progress', function (e) {
-      barFill.style.width = Math.round(e.detail.totalProgress * 100) + '%';
-    });
+  <section id="page-ar" class="page">
+    <div class="section-heading"><div><p class="eyebrow">3D & AUGMENTED REALITY</p><h2>ห้องทดลองอวัยวะ 3 มิติ</h2></div></div>
+    <div class="organ-picker" role="group" aria-label="เลือกอวัยวะ">
+      <button class="organ-btn selected" data-organ="heart">🫀 หัวใจ</button>
+      <button class="organ-btn" data-organ="lungs" disabled>🫁 ปอด <small>เร็ว ๆ นี้</small></button>
+      <button class="organ-btn" data-organ="brain" disabled>🧠 สมอง <small>เร็ว ๆ นี้</small></button>
+    </div>
+    <div class="model-panel">
+      <div class="model-label"><span class="live-dot"></span><span id="modelTitle">หัวใจมนุษย์ 3 มิติ</span></div>
+      <model-viewer id="organModel" src="./heart.glb" alt="โมเดลหัวใจมนุษย์สามมิติ"
+        camera-controls touch-action="pan-y" auto-rotate rotation-per-second="18deg"
+        shadow-intensity="1" exposure="1" environment-image="neutral"
+        ar ar-modes="scene-viewer webxr" ar-placement="floor" ar-scale="auto">
+        <div slot="progress-bar" class="progress-track"><div class="progress-fill"></div></div>
+        <button slot="ar-button" class="ar-launch">วางบนโต๊ะจริง (หากอุปกรณ์รองรับ)</button>
+      </model-viewer>
+    </div>
+    <div class="button-row">
+      <button class="btn primary" id="resetCamera">คืนค่ามุมมอง</button>
+      <button class="btn secondary" id="toggleRotate">หยุดหมุนอัตโนมัติ</button>
+    </div>
+    <div class="notice info" id="arSupportNote">หากอุปกรณ์รองรับ ARCore ปุ่ม “วางบนโต๊ะจริง” จะเปิด Scene Viewer หากไม่รองรับยังสามารถหมุนและซูมโมเดลได้ตามปกติ</div>
 
-    // โหลดเสร็จ
-    mv.addEventListener('load', function () {
-      loading.classList.add('done');
-      if (!mv.canActivateAR) { noAr.hidden = false; }
-    });
+    <div class="scan-card">
+      <div><p class="eyebrow">IMAGE TRACKING</p><h3>สแกนภาพหัวใจด้วยกล้อง</h3><p>ส่องกล้องไปยังบัตรภาพหัวใจที่ผ่านการเตรียมเป็น Image Target แล้ว ระบบจะแสดงโมเดล 3 มิติบนภาพ</p></div>
+      <button class="btn primary full" id="startScan">เปิดกล้องสแกนภาพ</button>
+      <p class="small muted">ต้องอัปโหลดไฟล์ targets/heart.mind ที่สร้างจากบัตรภาพก่อนใช้งาน ดูวิธีทำใน README</p>
+    </div>
+    <div id="scanWrap" class="scan-wrap" hidden>
+      <div class="scan-header"><b>โหมดสแกนภาพหัวใจ</b><button class="btn danger" id="stopScan">ปิดกล้อง</button></div>
+      <div id="mindar-container"></div>
+      <p id="scanStatus" class="small muted">กำลังเตรียมกล้อง…</p>
+    </div>
+    <div class="notice warning">ข้อควรทราบ: Image AR ต้องใช้ภาพเป้าหมายที่ผ่านการ Compile เป็นไฟล์ .mind ก่อน ไม่สามารถสแกนภาพหัวใจทุกภาพแบบอัตโนมัติได้</div>
+  </section>
 
-    // โหลดไม่สำเร็จ
-    mv.addEventListener('error', function () {
-      loading.classList.add('done');
-      errMsg.hidden = false;
-      errMsg.textContent = 'โหลดโมเดลไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต แล้วรีเฟรชหน้านี้อีกครั้ง';
-    });
+  <section id="page-lesson" class="page">
+    <div class="section-heading"><div><p class="eyebrow">MICRO LESSON</p><h2>บทเรียนอวัยวะมนุษย์</h2></div></div>
+    <article class="lesson-card">
+      <div class="lesson-emoji">🫀</div><div><h3>หัวใจ (Heart)</h3><p>หัวใจเป็นอวัยวะกล้ามเนื้อ ทำหน้าที่สูบฉีดเลือดไปยังส่วนต่าง ๆ ของร่างกาย เลือดช่วยลำเลียงออกซิเจนและสารอาหารไปให้เซลล์</p><p class="fact">จำไว้: หัวใจทำงานร่วมกับหลอดเลือดในระบบไหลเวียนเลือด</p></div>
+    </article>
+    <article class="lesson-card">
+      <div class="lesson-emoji">🫁</div><div><h3>ปอด (Lungs)</h3><p>ปอดเป็นอวัยวะสำคัญของระบบหายใจ ทำหน้าที่แลกเปลี่ยนก๊าซ โดยรับออกซิเจนเข้าสู่เลือดและขับคาร์บอนไดออกไซด์ออกจากร่างกาย</p><p class="fact">จำไว้: การหายใจช่วยให้ร่างกายได้รับออกซิเจน</p></div>
+    </article>
+    <article class="lesson-card">
+      <div class="lesson-emoji">🧠</div><div><h3>สมอง (Brain)</h3><p>สมองเป็นศูนย์ควบคุมและประสานงานการทำงานของร่างกาย เกี่ยวข้องกับการคิด ความจำ การรับความรู้สึก และการเคลื่อนไหว</p><p class="fact">จำไว้: สมองและไขสันหลังเป็นส่วนสำคัญของระบบประสาท</p></div>
+    </article>
+    <div class="notice info">บทเรียนปอดและสมองเปิดให้อ่านได้แล้ว ส่วนโมเดล 3 มิติของสองอวัยวะนี้จะเปิดใช้งานเมื่อเพิ่มไฟล์ .glb ในภายหลัง</div>
+  </section>
 
-    // ปุ่มหยุด/เล่นหัวใจเต้น (ทำงานเมื่อตัวแสดงโมเดลโหลดสำเร็จแล้วเท่านั้น)
-    var playing = true;
-    btnBeat.addEventListener('click', function () {
-      if (typeof mv.pause !== 'function') { return; }
-      if (playing) { mv.pause(); btnBeat.textContent = 'ให้หัวใจเต้นต่อ'; }
-      else { mv.play(); btnBeat.textContent = 'หยุดหัวใจเต้น'; }
-      playing = !playing;
-    });
+  <section id="page-quiz" class="page">
+    <div class="section-heading"><div><p class="eyebrow">KNOWLEDGE CHECK</p><h2>แบบทดสอบความรู้</h2><p class="muted">แบบทดสอบ 8 ข้อ เลือกคำตอบที่ถูกต้องที่สุด</p></div></div>
+    <div id="quizStart" class="quiz-start"><div class="quiz-icon">📝</div><h3>พร้อมทบทวนความรู้หรือยัง?</h3><p>ตอบคำถามเกี่ยวกับหัวใจ ปอด และสมอง</p><button class="btn primary" id="beginQuiz">เริ่มทำแบบทดสอบ</button></div>
+    <div id="quizArea" hidden>
+      <div class="quiz-progress"><span id="questionCount">ข้อ 1/8</span><div class="progress-track"><div id="quizProgress" class="progress-fill"></div></div></div>
+      <div class="question-card"><h3 id="questionText"></h3><div id="answerOptions" class="answer-options"></div><p id="answerFeedback" class="feedback" aria-live="polite"></p><button id="nextQuestion" class="btn primary full" disabled>ข้อต่อไป</button></div>
+    </div>
+    <div id="quizResult" class="result-card" hidden></div>
+  </section>
+</main>
 
-    // ปุ่มกลับมุมมองเดิม
-    btnReset.addEventListener('click', function () {
-      if (typeof mv.jumpCameraToGoal !== 'function') { return; }
-      mv.cameraOrbit = 'auto auto auto';
-      mv.cameraTarget = 'auto auto auto';
-      mv.fieldOfView = 'auto';
-      mv.jumpCameraToGoal();
-    });
+<footer><b>Mayo AR Human Body</b><br>สื่อการเรียนรู้ สกร.ระดับอำเภอมายอ<br><span>ต้นแบบเพื่อการเรียนรู้ ไม่ใช้แทนคำแนะนำทางการแพทย์</span></footer>
 
-    // ถ้าตัวแสดงโมเดลโหลดไม่สำเร็จภายใน 15 วินาที ให้แจ้งผู้ใช้
-    setTimeout(function () {
-      if (typeof mv.pause !== 'function') {
-        loading.classList.add('done');
-        errMsg.hidden = false;
-        errMsg.textContent = 'โหลดตัวแสดงโมเดล 3 มิติไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต แล้วรีเฟรชหน้านี้อีกครั้ง';
-      }
-    }, 15000);
-  </script>
+<script src="./js/app.js"></script>
+<script src="./js/quiz.js"></script>
 </body>
 </html>
